@@ -1,0 +1,28 @@
+#title {
+    margin-bottom: 2em;
+}
+
+#main {
+    text-align: center;
+}
+
+#tweet_content {
+    font-family: 'Arial Black', Gadget, sans-serif;
+    font-size: 2em;
+}
+
+#button_submit {
+    margin-top: 2em;
+    width: 100%;
+}
+
+#div_sondage {
+    float: left;
+    clear: both;
+    /*margin-top: 2em;*/
+}
+
+#button_visualisation {
+    text-align: center;
+    margin-top: 2em;
+}
