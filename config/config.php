@@ -20,6 +20,7 @@ function db_connect() {
 
 function populate_sql_from_csv($column_original_id, $column_tweet_content, $filename) {
     $not_inserted = 0;
+    // Filename must be with extension (like "file.csv" for example)
     $fichier = fopen($filename, "a+");
     while ($tab = fgetcsv($fichier, 1024, ';')) {
         $res = create_tweet($tab[$column_original_id], $tab[$column_tweet_content]);
@@ -28,6 +29,26 @@ function populate_sql_from_csv($column_original_id, $column_tweet_content, $file
         }
     }
     return $not_inserted;
+}
+
+function populate_sql_from_json($filename) {
+    global $connection;
+    $not_inserted_array = [];
+    // Filename must be with extension (like "file.json" for example)
+    $json_source = file_get_contents($filename);
+    //Décodage du JSON et récupération dans un tableau
+    $json_data = json_decode($json_source, TRUE);
+    //Insertion dans la base de données SQL
+    foreach ($json_data as $tweet) {
+        $state = "INSERT INTO `tweet` (`original_id`, `tweet_content`) "
+                . "VALUES ('" . $tweet['id'] . "','" . $tweet['content'] . "')";
+        $res = $connection->exec($state);
+        //Sauvegarde du tuple JSON dans un tableau si non inséré
+        if (!$res) {
+            $not_inserted_array[] = $tweet;
+        }
+    }
+    return $not_inserted_array;
 }
 
 function create_tweet($original_id, $tweet_content) {
@@ -45,7 +66,10 @@ function read_tweet_randomly() {
             . "ORDER BY RAND() LIMIT 1";
     $res = $connection->query($state, PDO::FETCH_ASSOC)->fetchAll();
 //    $res[0]['tweet_content'] = tweet_content_anonymizer($res[0]['text']);
-    return $res[0];
+    if (sizeof($res) != 0) {
+        return $res;
+    }
+    return NULL;
 }
 
 function read_all_tweets() {
@@ -66,6 +90,13 @@ function update_tweet_labels($tweet_id, $option_radio) {
 function tweet_content_anonymizer($tweet_content) {
     $pattern = "/@\\w+/u";
     return preg_replace($pattern, "@xxx", $tweet_content);
+}
+
+function tendance($tweet) {
+    $tableau_compte_avis = [$tweet['count_positif'], $tweet['count_neutre'], $tweet['count_negatif']];
+    $indice = array_search(max($tableau_compte_avis), $tableau_compte_avis);
+    $tableau_tendances = ['POSITIF', 'NEUTRE', 'NEGATIF'];
+    return $tableau_tendances[$indice];
 }
 
 ?>
