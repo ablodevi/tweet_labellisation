@@ -7,6 +7,12 @@ and open the template in the editor.
 
 <?php
 include './config/config.php';
+
+if (isset($_POST['tweet_id']) && isset($_POST['option_radio'])) {
+    update_tweet_labels($_POST['tweet_id'], $_POST['option_radio']);
+}
+
+$tweet = read_tweet_randomly();
 ?>
 
 <html>
@@ -22,69 +28,80 @@ include './config/config.php';
 
 
     <body>
+        <h1>IF25 - Plateforme web de labellisation de tweets</h1>
+        <p>Cette plateforme a pour but de réaliser un sondage d'opinion sur des tweets.
+            Ce sondage nous aidera dans notre projet à réaliser une étude se rapportant 
+            à l'approche supervisée des graphes de contenus sur les réseaux sociaux.</p>
 
-        <div id="main" class="row">
+        <p>Aidez-nous en donnant votre avis sur les tweets qui s'affichent ci-dessous! Merci</p>
 
-            <div class="col-md-8" id="div_sondage">
-                <h1 id="title">Labellisation de tweets</h1>
+        <div id="div_main" class="container">
 
-                <form method="post" action="traitement.php">
 
-                    <table>
+            <form method="post" action="#">
 
-                        <p id="tweet_content"><?php
-                            $tweet = read_tweet_randomly();
-                            $tweet_id = $tweet['id'];
-                            echo $tweet['tweet_content'];
-                            echo '<input type="hidden" name="tweet_id" value=' . $tweet_id . ' />';
-                            ?></p>
+                <table>
 
-                        <div class="radio">
-                            <label>
-                                <input type="radio" 
-                                       name="option_radio" 
-                                       id="option_radio_positif" 
-                                       value="positif"/>Avis positif                                
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" 
-                                       name="option_radio" 
-                                       id="option_radio_neutre" 
-                                       value="neutre"/>Avis neutre
-                            </label>
+                    <fieldset>
+                        <legend>Tweet</legend>
+
+                        <div id="tweet_content">
+                            <p>
+                                <?php
+                                if ($tweet != NULL) {
+                                    echo $tweet[0]['tweet_content'];
+                                    echo '<input type="hidden" name="tweet_id" value=' . $tweet[0]['id'] . ' />';
+                                } else {
+                                    echo 'Tous les tweets de la base ont déjà atteint le nombre maximum de labels autorisés.';
+                                }
+                                ?>
+                            </p>
                         </div>
 
+                    </fieldset>
+
+                    <div id="div_radio">
                         <div class="radio">
-                            <label>
-                                <input type="radio" 
-                                       name="option_radio" 
-                                       id="option_radio_negatif" 
-                                       value="negatif"/>Avis négatif
-                            </label>
+
+                            <input type="radio" 
+                                   name="option_radio" 
+                                   id="option_radio_positif" 
+                                   value="positif"/>Avis positif   
                         </div>
+                        <div class="radio">
+                            <input type="radio" 
+                                   name="option_radio" 
+                                   id="option_radio_neutre" 
+                                   value="neutre"/>Avis neutre
+                        </div>
+                        <div class="radio">
+                            <input type="radio" 
+                                   name="option_radio" 
+                                   id="option_radio_negatif" 
+                                   value="negatif"/>Avis négatif
 
-                    </table>
-
-
-                    <div id="button_submit">
-                        <button type="submit" class="btn btn-info" id="btn-envoyer">Valider</button>
-                        <!--<button type="reset" class="btn btn-default" id="btn-skip"> Ignorer </button>-->
+                        </div>
                     </div>
 
-                </form>
-                
-                <div id="button_visualisation">
-                    <a href="visualisation.php" role="button">Visualisation</a>
-                </div>
-                
+                </table>
+
+                <?php
+                if ($tweet != NULL) {
+
+                    echo '<div id="button_submit">';
+                    echo '<button type="submit" class="btn btn-info" id="btn-envoyer">Valider</button>';
+                    echo '</div>';
+                }
+                ?>
+
+            </form>
+
+            <div>
+                <a href="visualisation.php" role="button">Visualisation</a>
             </div>
 
-            
 
         </div>
-
 
     </body>
 
