@@ -5,6 +5,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+//define(POSITIF, $value);
+
 //On stocke une connexion persistante dans la variable db
 $connection = db_connect();
 
@@ -12,7 +14,7 @@ $connection = db_connect();
 function db_connect() {
     $dsn = "mysql:host=localhost;port=3306;dbname=tweet_labellisation";
     $user = "root";
-    $pass = "";
+    $pass = "MgnTskym";
     return new PDO($dsn, $user, $pass, array(
         PDO::ATTR_PERSISTENT => true
     ));
@@ -70,6 +72,14 @@ function read_tweet_randomly() {
         return $res;
     }
     return NULL;
+}
+
+function read_user_id_randomly() {
+    
+}
+
+function read_tweet_randomly_by_user_id($user_id) {
+    
 }
 
 function read_all_tweets() {
