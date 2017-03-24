@@ -29,11 +29,12 @@ $tweet = read_tweet_randomly();
 
     <body>
         <h1>IF25 - Plateforme web de labellisation de tweets</h1>
-        <p>Cette plateforme a pour but de réaliser un sondage d'opinion sur des tweets.
+        <p>Cette plateforme a pour but de réaliser un sondage sur les contenus des tweets.
             Ce sondage nous aidera dans notre projet à réaliser une étude se rapportant 
             à l'approche supervisée des graphes de contenus sur les réseaux sociaux.</p>
 
-        <p>Aidez-nous en donnant votre avis sur les tweets qui s'affichent ci-dessous! Merci</p>
+        <p>Choisissez l'option qui vous paraît le mieux correspondre à ce que vous pensez 
+            que le tweet véhicule comme message.</p>
 
         <div id="div_main" class="container">
 
@@ -95,10 +96,6 @@ $tweet = read_tweet_randomly();
                 ?>
 
             </form>
-
-            <div>
-                <a href="visualisation.php" role="button">Visualisation</a>
-            </div>
 
 
         </div>
